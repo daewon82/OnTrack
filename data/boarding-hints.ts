@@ -77,6 +77,9 @@ export const BOARDING_HINTS: StationBoardingHints[] = [
       { exitNo: 2, car: 7, door: 2 },
       { exitNo: 4, car: 2, door: 3 },
     ],
+    arrivals: [
+      { arrivalAt: "삼송", car: 4, door: 2, note: "추정값 (또타지하철 확인 권장)" },
+    ],
   },
   {
     line: "3호선",
@@ -111,7 +114,7 @@ export const BOARDING_HINTS: StationBoardingHints[] = [
     transfers: [
       { transferLine: "공항철도", transferAt: "디지털미디어시티", car: 1, door: 1, note: "출발쪽" },
       { transferLine: "경의중앙선", transferAt: "디지털미디어시티", car: 3, door: 2 },
-      { transferLine: "3호선", transferAt: "불광", car: 4, door: 2 },
+      { transferLine: "3호선", transferAt: "불광", car: 2, door: 2, note: "사용자 확인 — 환승 가장 빠름" },
       { transferLine: "3호선", transferAt: "연신내", car: 5, door: 3 },
     ],
     exits: [
