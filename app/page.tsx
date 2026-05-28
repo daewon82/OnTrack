@@ -29,6 +29,7 @@ import {
 import {
   findTransferHint,
   findExitHint,
+  findArrivalHint,
   formatBoardingPosition,
 } from "@/data/boarding-hints";
 
@@ -199,7 +200,7 @@ export default function Home() {
     if (!dir) return null;
     const inout = directionToInoutTag(dir);
 
-    // 도착 출구 입력되어 있고 환승역이 도착 노선과 같으면 출구 hint
+    // 1순위: 도착 출구 hint (가장 정확)
     if (
       active.destinationExit &&
       active.destination &&
@@ -216,6 +217,21 @@ export default function Home() {
         return `🚪 ${formatBoardingPosition(exitHint)} — ${active.destination.name} ${active.destinationExit}번 출구 가까움${note}`;
       }
     }
+
+    // 2순위: 환승역에서 도착역 접근 hint (출구 모를 때 fallback)
+    if (active.destination && legOrigin.line === active.destination.line) {
+      const arrivalHint = findArrivalHint(
+        legOrigin.line,
+        legOrigin.apiName,
+        inout,
+        active.destination.apiName,
+      );
+      if (arrivalHint) {
+        const note = arrivalHint.note ? ` · ${arrivalHint.note}` : "";
+        return `🚪 ${formatBoardingPosition(arrivalHint)} — ${active.destination.name} 도착 빠름${note}`;
+      }
+    }
+
     return null;
   }, [active]);
 

@@ -29,6 +29,11 @@ export type ExitHint = BoardingPosition & {
   exitNo: number;
 };
 
+export type ArrivalHint = BoardingPosition & {
+  /** 이 칸/문에 타면 빠르게 접근할 수 있는 도착역 apiName */
+  arrivalAt: string;
+};
+
 export type StationBoardingHints = {
   /** 노선명 (예: "3호선") */
   line: string;
@@ -40,6 +45,8 @@ export type StationBoardingHints = {
   transfers?: TransferHint[];
   /** 출구 추천 (여러 출구) */
   exits?: ExitHint[];
+  /** 도착역 접근 추천 (출구 미지정 시 fallback) */
+  arrivals?: ArrivalHint[];
 };
 
 // ─────────────────────────────────────────────────────────
@@ -192,6 +199,16 @@ export const BOARDING_HINTS: StationBoardingHints[] = [
       { transferLine: "경의중앙선", transferAt: "디지털미디어시티", car: 2, door: 1 },
     ],
   },
+
+  // ── 2호선 환승역에서 도착역 접근 추천 ─────────
+  {
+    line: "2호선",
+    station: "을지로3가",
+    direction: "2", // forward: 을지로3가 → 잠실 (idx 2 → 15)
+    arrivals: [
+      { arrivalAt: "잠실", car: 7, door: 3, note: "추정값 — 잠실 주출구(8/11번) 부근, 또타지하철 확인 권장" },
+    ],
+  },
 ];
 
 // ─────────────────────────────────────────────────────────
@@ -233,6 +250,22 @@ export function findExitHint(
   );
   if (!entry?.exits) return null;
   return entry.exits.find((e) => e.exitNo === exitNo) ?? null;
+}
+
+export function findArrivalHint(
+  line: string,
+  station: string,
+  direction: "1" | "2",
+  arrivalAt: string,
+): ArrivalHint | null {
+  const entry = BOARDING_HINTS.find(
+    (h) =>
+      h.line === line &&
+      h.station === station &&
+      h.direction === direction,
+  );
+  if (!entry?.arrivals) return null;
+  return entry.arrivals.find((a) => a.arrivalAt === arrivalAt) ?? null;
 }
 
 export function formatBoardingPosition(p: BoardingPosition): string {
