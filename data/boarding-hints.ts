@@ -55,6 +55,7 @@ export const BOARDING_HINTS: StationBoardingHints[] = [
     transfers: [
       { transferLine: "6호선", transferAt: "불광", car: 4, door: 2, note: "환승 통로 가까움" },
       { transferLine: "6호선", transferAt: "연신내", car: 7, door: 3 },
+      { transferLine: "2호선", transferAt: "을지로3가", car: 4, door: 3, note: "추정값 (또타지하철 확인 권장)" },
     ],
   },
   {
